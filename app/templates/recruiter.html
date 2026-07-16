@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recruiter Dashboard · ATS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/recruiter.css" />
+</head>
+<body>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="brand">
+        <span class="brand-mark">●</span>
+        <span class="brand-name">Resume Screener</span>
+      </div>
+      <div class="masthead-meta">RECRUITER · N&deg;01</div>
+    </div>
+  </header>
+
+  <main class="dispatch">
+
+    <section class="auth-panel" id="auth-panel">
+      <div class="auth-box">
+        <span class="panel-label">LOGIN REQUIRED</span>
+        <p class="auth-status" id="auth-status">Sign in to upload and rank resumes.</p>
+
+        <form id="login-form" class="auth-form">
+          <input type="email" id="login-email" placeholder="Email" required>
+          <input type="password" id="login-password" placeholder="Password" required>
+          <button type="submit" class="btn-primary">Sign In</button>
+        </form>
+
+        <p class="auth-toggle">
+          No account? <a href="#" id="show-signup">Sign up</a>
+        </p>
+
+        <form id="signup-form" class="auth-form" hidden>
+          <input type="email" id="signup-email" placeholder="Email" required>
+          <input type="password" id="signup-password" placeholder="Password (min 8 chars)" required>
+          <button type="submit" class="btn-primary">Create Account</button>
+        </form>
+
+        <p class="auth-error" id="auth-error"></p>
+      </div>
+    </section>
+
+    <div id="app-content" hidden>
+      <div class="user-bar">
+        <span id="user-email"></span>
+        <button type="button" class="btn-secondary" id="logout-btn">Log Out</button>
+      </div>
+    </div>
+
+    <div id="protected-content" hidden>
+
+      <section class="hero">
+        <p class="kicker">CANDIDATE PIPELINE · LIVE RANKING</p>
+        <h1 class="headline">
+          Rank your<br />
+          <em>best-fit candidates.</em>
+        </h1>
+        <p class="subhead">
+          Upload resumes in bulk. Every candidate is parsed, scored against
+          the role, and ranked — instantly.
+        </p>
+      </section>
+
+      <section class="upload-panel" id="upload-panel">
+        <div class="upload-panel-header">
+          <span class="panel-label">01 · UPLOAD</span>
+        </div>
+
+        <form id="upload-form">
+          <label for="file-input" class="dropzone" id="dropzone">
+            <span class="dropzone-title">Drop resumes here</span>
+            <span class="dropzone-sub">or click to browse &mdash; PDF, DOCX &middot; up to 100 files</span>
+          </label>
+          <input type="file" id="file-input" name="files" multiple accept=".pdf,.docx" hidden />
+
+          <ul class="file-list" id="file-list"></ul>
+
+          <button type="submit" class="btn-primary" id="submit-btn" disabled>
+            Analyze &amp; Rank
+          </button>
+        </form>
+
+        <p class="status-line" id="status-line"></p>
+      </section>
+
+      <section class="results-panel" id="results-panel" hidden>
+        <div class="results-header">
+          <span class="panel-label">02 · RESULTS</span>
+          <span class="results-count" id="results-count"></span>
+        </div>
+
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Candidate</th>
+              <th>Score</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+          <tbody id="results-body"></tbody>
+        </table>
+
+        <p class="error-summary" id="error-summary" hidden></p>
+      </section>
+
+      <section class="history-panel" id="history-panel">
+        <div class="history-header">
+          <span class="panel-label">03 · HISTORY</span>
+          <button type="button" class="btn-secondary" id="load-history-btn">Load Past Results</button>
+        </div>
+        <table class="results-table" id="history-table" hidden>
+          <thead>
+            <tr>
+              <th>Candidate</th>
+              <th>Uploaded</th>
+              <th>Score</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+        <p class="status-line" id="history-status"></p>
+      </section>
+
+    </div>
+
+    <footer class="dispatch-footer">
+      <span class="footer-index" id="footer-index">00 / 00</span>
+      <span class="footer-caption">A DISPATCH</span>
+      <a href="/" class="footer-link">HOME →</a>
+    </footer>
+
+  </main>
+
+  <script src="/static/js/recruiter.js"></script>
+</body>
+</html>

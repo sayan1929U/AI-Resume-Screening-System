@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Resume Screening System — Hire Smarter with AI</title>
+<meta name="description" content="Upload resumes, calculate ATS scores, match candidates to job descriptions, and generate intelligent hiring insights in seconds.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     AMBIENT BACKGROUND SYSTEM
+     ============================================================ -->
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-aurora"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-blob bg-blob--indigo"></div>
+  <div class="bg-blob bg-blob--cyan"></div>
+  <div class="bg-blob bg-blob--violet"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="particles" id="particles"></div>
+  <div class="bg-noise"></div>
+</div>
+
+<!-- ============================================================
+     ANNOUNCEMENT BAR
+     ============================================================ -->
+<div class="announcement-bar">
+  <div class="container announcement-bar__inner">
+    <span class="announcement-bar__author">Sayan Dey</span>
+    <span class="announcement-bar__stack">Built with FastAPI <i class="fa-solid fa-circle" aria-hidden="true"></i> Machine Learning <i class="fa-solid fa-circle" aria-hidden="true"></i> NLP</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<header class="navbar" id="navbar">
+  <div class="container navbar__inner">
+    <a href="#home" class="brand">
+      <span class="brand__mark" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
+      <span class="brand__name">AI Resume</span>
+    </a>
+
+    <nav class="navbar__nav" id="navbarNav" aria-label="Primary">
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#demo">Demo</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="/api/recruiter">Recruiter Dashboard</a>
+    </nav>
+
+    <div class="navbar__actions">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+        <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        <i class="fa-solid fa-sun" aria-hidden="true"></i>
+      </button>
+      <a href="https://github.com/sayan1929U" target="_blank" rel="noopener" class="btn btn--ghost btn--sm">
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+        <span>GitHub</span>
+      </a>
+      <a href="/api/recruiter" class="btn btn--ghost btn--sm">
+        <i class="fa-solid fa-table-columns" aria-hidden="true"></i>
+        <span>Recruiter</span>
+      </a>
+      <a href="#demo" class="btn btn--primary btn--sm">
+        <span>Get Started</span>
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </a>
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="home">
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="container hero__grid">
+
+      <div class="hero__content">
+        <p class="eyebrow"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> Hire Smarter. Faster. With AI.</p>
+
+        <h1 id="hero-heading" class="hero__title">
+          AI Resume<br>
+          <span class="text-gradient">Screening</span> Platform
+        </h1>
+
+        <p class="hero__subtitle">
+          Upload resumes, analyze candidates with AI, calculate ATS scores,
+          match candidates to job descriptions, and generate intelligent
+          hiring insights within seconds.
+        </p>
+
+        <div class="hero__actions">
+          <a href="#demo" class="btn btn--primary btn--lg">
+            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+            <span>Start Screening</span>
+          </a>
+          <a href="#demo" class="btn btn--ghost btn--lg" id="watchDemoBtn">
+            <i class="fa-solid fa-circle-play" aria-hidden="true"></i>
+            <span>Watch Demo</span>
+          </a>
+        </div>
+
+        <div class="hero__trust">
+          <span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Privacy-first analysis</span>
+          <span><i class="fa-solid fa-microchip" aria-hidden="true"></i> FastAPI + ML engine</span>
+          <span><i class="fa-regular fa-clock" aria-hidden="true"></i> Results in &lt;2 seconds</span>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+
+        <!-- floating glow badges -->
+        <div class="float-badge float-badge--one" data-tilt>
+          <i class="fa-solid fa-file-circle-check" aria-hidden="true"></i>
+          <span>Resume Uploaded</span>
+        </div>
+        <div class="float-badge float-badge--two" data-tilt>
+          <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+          <span>ATS Score <strong>94</strong></span>
+        </div>
+        <div class="float-badge float-badge--three" data-tilt>
+          <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+          <span>Skill Match <strong>92%</strong></span>
+        </div>
+        <div class="float-badge float-badge--four" data-tilt>
+          <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+          <span>Top Candidate</span>
+        </div>
+        <div class="float-badge float-badge--five" data-tilt>
+          <i class="fa-solid fa-robot" aria-hidden="true"></i>
+          <span>Hiring AI</span>
+        </div>
+
+        <!-- live AI dashboard card -->
+        <div class="dash-card glass" data-tilt>
+          <div class="dash-card__head">
+            <span class="dash-live"><span class="dash-live__dot"></span> Live analysis</span>
+            <span class="dash-card__badge dash-card__badge--good">Highly Recommended</span>
+          </div>
+
+          <div class="dash-card__profile">
+            <span class="avatar avatar--lg">SD</span>
+            <div>
+              <p class="dash-card__name">Sayan Dey</p>
+              <p class="dash-card__role">AI Engineer & Researcher</p>
+            </div>
+          </div>
+
+          <div class="dash-card__meta">
+            <div class="dash-meta">
+              <span class="dash-meta__label">Experience</span>
+              <span class="dash-meta__value">5 Years</span>
+            </div>
+            <div class="dash-score-ring" style="--score: 94;">
+              <span class="dash-score-ring__num">94<small>%</small></span>
+              <span class="dash-score-ring__label">ATS Score</span>
+            </div>
+          </div>
+
+          <div class="dash-bars">
+            <div class="dash-bar">
+              <div class="dash-bar__head"><span>ATS Compatibility</span><span>94%</span></div>
+              <div class="progress"><div class="progress__bar" data-fill="94"></div></div>
+            </div>
+            <div class="dash-bar">
+              <div class="dash-bar__head"><span>Skill Match</span><span>92%</span></div>
+              <div class="progress"><div class="progress__bar" data-fill="92"></div></div>
+            </div>
+            <div class="dash-bar">
+              <div class="dash-bar__head"><span>JD Relevance</span><span>89%</span></div>
+              <div class="progress"><div class="progress__bar" data-fill="89"></div></div>
+            </div>
+          </div>
+
+          <ul class="tag-list">
+            <li class="tag">Python</li>
+            <li class="tag">FastAPI</li>
+            <li class="tag">Docker</li>
+            <li class="tag">AWS</li>
+            <li class="tag">TensorFlow</li>
+            <li class="tag">Scikit-learn</li>
+            <li class="tag">NLP</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WORKFLOW
+       ============================================================ -->
+  <section class="workflow" id="workflow" aria-labelledby="workflow-heading">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow"><i class="fa-solid fa-route" aria-hidden="true"></i> The pipeline</p>
+        <h2 id="workflow-heading" class="section-title">Seven steps from PDF to <span class="text-gradient">hiring decision</span></h2>
+        <p class="section-sub">Every resume moves through the same deterministic pipeline, so every score is explainable and repeatable.</p>
+      </div>
+
+      <ol class="workflow__list">
+        <li class="workflow__step reveal">
+          <span class="workflow__num">01</span>
+          <div class="workflow__card glass">
+            <span class="workflow__icon"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i></span>
+            <h3>Upload Resume</h3>
+            <p>PDF or DOCX, single file or bulk batch.</p>
+          </div>
+        </li>
+        <li class="workflow__step reveal">
+          <span class="workflow__num">02</span>
+          <div class="workflow__card glass">
+            <span class="workflow__icon"><i class="fa-solid fa-file-lines" aria-hidden="true"></i></span>
+            <h3>Extract Text</h3>
+            <p>pdfplumber and python-docx pull clean, structured text.</p>
+          </div>
+        </li>
+        <li class="workflow__step reveal">
+          <span class="workflow__num">03</span>
+          <div class="workflow__card glass">
+            <span class="workflow__icon"><i class="fa-solid fa-brain" aria-hidden="true"></i></span>
+            <h3>AI Analysis</h3>
+            <p>NLP models parse context, tone, and career trajectory.</p>
+          </div>
+        </li>
+        <li class="workflow__step reveal">
+          <span class="workflow__num">04</span>
+          <div class="workflow__card glass">
+            <span class="workflow__icon"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i></span>
+            <h3>Skill Extraction</h3>
+            <p>Technical and soft skills are identified and weighted.</p>
+          </div>
+        </li>
+        <li class="workflow__step reveal">
+          <span class="workflow__num">05</span>
+          <div class="workflow__card glass">
+            <span class="workflow__icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></span>
+            <h3>ATS Score</h3>
+            <p>A transparent compatibility score is calculated.</p>
+          </div>
+        </li>
+        <li class="workflow__step reveal">
+          <span class="workflow__num">06</span>
+          <div class="workflow__card glass">
+            <span class="workflow__icon"><i class="fa-solid fa-code-compare" aria-hidden="true"></i></span>
+            <h3>JD Matching</h3>
+            <p>Semantic matching against the job description follows.</p>
+          </div>
+        </li>
+        <li class="workflow__step reveal">
+          <span class="workflow__num">07</span>
+          <div class="workflow__card glass">
+            <span class="workflow__icon"><i class="fa-solid fa-award" aria-hidden="true"></i></span>
+            <h3>Hiring Recommendation</h3>
+            <p>A ranked, confidence-scored recommendation is delivered.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FEATURES
+       ============================================================ -->
+  <section class="features" id="features" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow"><i class="fa-solid fa-cubes" aria-hidden="true"></i> Capabilities</p>
+        <h2 id="features-heading" class="section-title">One engine, <span class="text-gradient">every screening task</span></h2>
+        <p class="section-sub">Everything a hiring team needs between "resume received" and "candidate ranked."</p>
+      </div>
+
+      <div class="features__grid">
+        <article class="feature-card glass reveal">
+          <span class="feature-card__icon"><i class="fa-solid fa-file-lines" aria-hidden="true"></i></span>
+          <h3>Resume Parsing</h3>
+          <p>Structured extraction from any resume format.</p>
+          <ul class="chip-list"><li>PDF</li><li>DOCX</li></ul>
+        </article>
+
+        <article class="feature-card glass reveal">
+          <span class="feature-card__icon"><i class="fa-solid fa-code" aria-hidden="true"></i></span>
+          <h3>Skill Extraction</h3>
+          <p>Detects verified technical skills across every stack.</p>
+          <ul class="chip-list"><li>Python</li><li>SQL</li><li>Docker</li><li>FastAPI</li><li>TensorFlow</li><li>AWS</li></ul>
+        </article>
+
+        <article class="feature-card glass reveal">
+          <span class="feature-card__icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></span>
+          <h3>ATS Scoring</h3>
+          <p>A defensible score built from three signals.</p>
+          <ul class="chip-list"><li>ATS compatibility</li><li>Resume quality</li><li>Missing skills</li></ul>
+        </article>
+
+        <article class="feature-card glass reveal">
+          <span class="feature-card__icon"><i class="fa-solid fa-code-compare" aria-hidden="true"></i></span>
+          <h3>Job Matching</h3>
+          <p>Semantic matching against the job description, not keyword search.</p>
+        </article>
+
+        <article class="feature-card glass reveal">
+          <span class="feature-card__icon"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i></span>
+          <h3>Candidate Ranking</h3>
+          <p>Ranks multiple resumes automatically against a single role.</p>
+        </article>
+
+        <article class="feature-card glass reveal">
+          <span class="feature-card__icon"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i></span>
+          <h3>AI Suggestions</h3>
+          <p>Actionable feedback delivered with every score.</p>
+          <ul class="chip-list"><li>Missing keywords</li><li>Resume improvements</li><li>Better formatting</li></ul>
+        </article>
+
+        <article class="feature-card glass reveal">
+          <span class="feature-card__icon"><i class="fa-solid fa-table-columns" aria-hidden="true"></i></span>
+          <h3>Recruiter Dashboard</h3>
+          <p>Compare multiple candidates side by side in one view.</p>
+        </article>
+
+        <article class="feature-card glass reveal">
+          <span class="feature-card__icon"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i></span>
+          <h3>Analytics</h3>
+          <p>Clear visual breakdowns for every hiring pipeline.</p>
+          <ul class="chip-list"><li>Average ATS</li><li>Skill distribution</li><li>Experience</li><li>Recommendations</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       LIVE DEMO
+       ============================================================ -->
+  <section class="live-demo" id="demo" aria-labelledby="demo-heading">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow"><i class="fa-solid fa-flask" aria-hidden="true"></i> Live demo</p>
+        <h2 id="demo-heading" class="section-title">Watch a resume get <span class="text-gradient">screened in real time</span></h2>
+        <p class="section-sub">Fill in a candidate profile below — the same workspace your recruiters would use.</p>
+      </div>
+
+      <div class="demo-stage">
+
+        <!-- STEP 1: input form -->
+        <form class="demo-panel glass" id="demoForm" novalidate>
+          <div class="demo-panel__grid">
+            <label class="field">
+              <span>Candidate Name</span>
+              <input type="text" name="candidateName" id="candidateName" placeholder="Sayan Dey" required>
+            </label>
+            <label class="field">
+              <span>Experience</span>
+              <input type="text" name="experience" id="experience" placeholder="5 Years">
+            </label>
+            <label class="field">
+              <span>Current Role</span>
+              <input type="text" name="role" id="role" placeholder="Senior ML Engineer">
+            </label>
+            <label class="field">
+              <span>Email</span>
+              <input type="email" name="email" placeholder="sayan@example.com">
+            </label>
+            <label class="field">
+              <span>Phone</span>
+              <input type="tel" name="phone" placeholder="+91 98765 43210">
+            </label>
+            <label class="field">
+              <span>Education</span>
+              <input type="text" name="education" id="education" placeholder="B.Tech, Computer Science">
+            </label>
+            <label class="field field--full">
+              <span>Skills</span>
+              <input type="text" name="skills" placeholder="Python, FastAPI, Docker, AWS, TensorFlow">
+            </label>
+            <label class="field field--full field--upload">
+              <span>Resume Upload</span>
+              <div class="upload-drop" id="uploadArea">
+                <i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i>
+                <span class="upload-drop__text">Drag resume here or click to browse</span>
+                <input type="file" name="resume" id="resumeFile" accept=".pdf,.doc,.docx">
+              </div>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--lg btn--block" id="analyzeBtn">
+            <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+            <span>Analyze Resume</span>
+          </button>
+        </form>
+
+        <!-- STEP 2: AI thinking sequence -->
+        <div class="demo-panel demo-loading glass" id="demoLoading" hidden>
+          <div class="loading-orb"></div>
+          <p class="loading-status" id="loadingStatus">AI Thinking<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>
+          <ul class="loading-steps" id="loadingSteps">
+            <li data-step="0"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Parsing resume…</li>
+            <li data-step="1"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Extracting skills…</li>
+            <li data-step="2"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Calculating ATS…</li>
+            <li data-step="3"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Matching job description…</li>
+            <li data-step="4"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Complete.</li>
+          </ul>
+        </div>
+
+        <!-- STEP 3: result dashboard -->
+        <div class="demo-panel result-dashboard glass" id="resultDashboard" hidden>
+
+          <div class="result-head">
+            <div class="dash-card__profile">
+              <span class="avatar avatar--lg" id="resultInitials">SD</span>
+              <div>
+                <p class="dash-card__name" id="resultName">Sayan Dey</p>
+                <p class="dash-card__role" id="resultRole">Senior ML Engineer</p>
+              </div>
+            </div>
+            <span class="dash-card__badge dash-card__badge--good" id="resultRecommendation">Highly Recommended</span>
+          </div>
+
+          <div class="result-meta">
+            <div class="result-meta__item"><i class="fa-solid fa-envelope" aria-hidden="true"></i> <span id="resultEmail">sayan@example.com</span></div>
+            <div class="result-meta__item"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> <span id="resultExperience">5 Years</span></div>
+            <div class="result-meta__item"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> <span id="resultEducation">B.Tech, Computer Science</span></div>
+          </div>
+
+          <div class="result-scores">
+            <div class="score-ring" style="--score:94;">
+              <span class="score-ring__num">94</span>
+              <span class="score-ring__label">ATS Score</span>
+            </div>
+            <div class="score-ring score-ring--sm" style="--score:91;">
+              <span class="score-ring__num">91</span>
+              <span class="score-ring__label">Job Match</span>
+            </div>
+            <div class="score-ring score-ring--sm" style="--score:92;">
+              <span class="score-ring__num">92</span>
+              <span class="score-ring__label">Skill Match</span>
+            </div>
+            <div class="score-ring score-ring--sm" style="--score:88;">
+              <span class="score-ring__num">88</span>
+              <span class="score-ring__label">Confidence</span>
+            </div>
+          </div>
+
+          <div class="result-columns">
+            <div class="result-block">
+              <h4>Technical Skills</h4>
+              <ul class="tag-list" id="resultTechSkills">
+                <li class="tag">Python</li><li class="tag">FastAPI</li><li class="tag">Docker</li><li class="tag">AWS</li><li class="tag">TensorFlow</li>
+              </ul>
+            </div>
+            <div class="result-block">
+              <h4>Soft Skills</h4>
+              <ul class="tag-list">
+                <li class="tag tag--soft">Communication</li><li class="tag tag--soft">Leadership</li><li class="tag tag--soft">Problem Solving</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="result-columns">
+            <div class="result-block">
+              <h4><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Strengths</h4>
+              <ul class="dot-list dot-list--good">
+                <li>Strong production ML deployment experience</li>
+                <li>Clear quantified impact across every role</li>
+              </ul>
+            </div>
+            <div class="result-block">
+              <h4><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Weaknesses</h4>
+              <ul class="dot-list dot-list--warn">
+                <li>Limited large-scale distributed systems exposure</li>
+                <li>No leadership title held yet</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="result-columns">
+            <div class="result-block">
+              <h4><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Missing Skills</h4>
+              <ul class="tag-list">
+                <li class="tag tag--missing">Kubernetes</li><li class="tag tag--missing">MLOps</li><li class="tag tag--missing">System Design</li>
+              </ul>
+            </div>
+            <div class="result-block">
+              <h4><i class="fa-solid fa-book-open" aria-hidden="true"></i> Recommended Courses</h4>
+              <ul class="dot-list">
+                <li>Kubernetes for ML Engineers</li>
+                <li>Designing Data-Intensive Systems</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button type="button" class="btn btn--primary" id="downloadReportBtn">
+              <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+              <span>Download Report</span>
+            </button>
+            <button type="button" class="btn btn--ghost" id="compareBtn">
+              <i class="fa-solid fa-clone" aria-hidden="true"></i>
+              <span>Compare Candidate</span>
+            </button>
+            <button type="button" class="btn btn--ghost" id="resetDemoBtn">
+              <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+              <span>Screen Another</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TECHNOLOGIES
+       ============================================================ -->
+  <section class="tech-stack" aria-labelledby="tech-heading">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Under the hood</p>
+        <h2 id="tech-heading" class="section-title">Built on a <span class="text-gradient">production-grade stack</span></h2>
+      </div>
+
+      <div class="tech-grid">
+        <div class="tech-tile reveal"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span>FastAPI</span></div>
+        <div class="tech-tile reveal"><i class="fa-brands fa-python" aria-hidden="true"></i><span>Python</span></div>
+        <div class="tech-tile reveal"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i><span>Scikit-learn</span></div>
+        <div class="tech-tile reveal"><i class="fa-brands fa-docker" aria-hidden="true"></i><span>Docker</span></div>
+        <div class="tech-tile reveal"><i class="fa-solid fa-cloud" aria-hidden="true"></i><span>Render</span></div>
+        <div class="tech-tile reveal"><i class="fa-brands fa-github" aria-hidden="true"></i><span>GitHub</span></div>
+        <div class="tech-tile reveal"><i class="fa-brands fa-html5" aria-hidden="true"></i><span>HTML</span></div>
+        <div class="tech-tile reveal"><i class="fa-brands fa-css3-alt" aria-hidden="true"></i><span>CSS</span></div>
+        <div class="tech-tile reveal"><i class="fa-brands fa-js" aria-hidden="true"></i><span>JavaScript</span></div>
+        <div class="tech-tile reveal"><i class="fa-solid fa-code" aria-hidden="true"></i><span>Jinja2</span></div>
+        <div class="tech-tile reveal"><i class="fa-solid fa-table" aria-hidden="true"></i><span>Pandas</span></div>
+        <div class="tech-tile reveal"><i class="fa-solid fa-calculator" aria-hidden="true"></i><span>NumPy</span></div>
+        <div class="tech-tile reveal"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i><span>pdfplumber</span></div>
+        <div class="tech-tile reveal"><i class="fa-solid fa-file-word" aria-hidden="true"></i><span>python-docx</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STATS
+       ============================================================ -->
+  <section class="stats" aria-label="Product statistics">
+    <div class="container stats__grid">
+      <div class="stat-card glass reveal">
+        <p class="stat-card__value"><span class="counter" data-target="100">0</span>+</p>
+        <p class="stat-card__label">Resumes Tested</p>
+      </div>
+      <div class="stat-card glass reveal">
+        <p class="stat-card__value"><span class="counter" data-target="95">0</span>%</p>
+        <p class="stat-card__label">ATS Accuracy</p>
+      </div>
+      <div class="stat-card glass reveal">
+        <p class="stat-card__value"><span class="counter" data-target="12">0</span>+</p>
+        <p class="stat-card__label">AI Features</p>
+      </div>
+      <div class="stat-card glass reveal">
+        <p class="stat-card__value">&lt;<span class="counter" data-target="2">0</span>s</p>
+        <p class="stat-card__label">Average Analysis Time</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ABOUT
+       ============================================================ -->
+  <section class="about" id="about" aria-labelledby="about-heading">
+    <div class="container about__grid">
+      <div class="about__content">
+        <p class="eyebrow"><i class="fa-solid fa-user" aria-hidden="true"></i> About the project</p>
+        <h2 id="about-heading" class="section-title">Built to make screening <span class="text-gradient">fair and fast</span></h2>
+        <p class="section-sub" style="margin-inline:0;">
+          AI Resume Screening System was built as a full-stack machine learning
+          project pairing a FastAPI + NLP backend with a production-quality
+          interface. It parses resumes, scores them against real job
+          descriptions, and explains every decision it makes — so hiring
+          teams can move fast without losing the reasoning behind a score.
+        </p>
+      </div>
+      <div class="about__card glass">
+        <p class="about__quote">"Every score should be explainable in one glance."</p>
+        <div class="about__author">
+          <span class="avatar avatar--lg">SD</span>
+          <div>
+            <p class="dash-card__name">Sayan Dey</p>
+            <p class="dash-card__role">AI Engineer &amp; Researcher</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FAQ
+       ============================================================ -->
+  <section class="faq" aria-labelledby="faq-heading">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> FAQ</p>
+        <h2 id="faq-heading" class="section-title">Common questions</h2>
+      </div>
+
+      <div class="accordion" id="accordion">
+        <div class="accordion__item">
+          <button class="accordion__trigger" aria-expanded="false">
+            <span>What file formats can I upload?</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="accordion__panel">
+            <p>PDF and DOCX are supported natively, parsed with pdfplumber and python-docx respectively.</p>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button class="accordion__trigger" aria-expanded="false">
+            <span>How is the ATS score calculated?</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="accordion__panel">
+            <p>It combines ATS formatting compatibility, resume quality signals, and missing-skill detection into a single, explainable percentage.</p>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button class="accordion__trigger" aria-expanded="false">
+            <span>Can I compare multiple candidates at once?</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="accordion__panel">
+            <p>Yes — the recruiter dashboard ranks every uploaded resume against the same job description automatically.</p>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button class="accordion__trigger" aria-expanded="false">
+            <span>Is candidate data stored anywhere?</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="accordion__panel">
+            <p>This demo runs entirely client-side. In production, the FastAPI backend processes files in memory and nothing is persisted unless you configure storage.</p>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button class="accordion__trigger" aria-expanded="false">
+            <span>Can I export a candidate report?</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="accordion__panel">
+            <p>Yes — the result dashboard includes a one-click "Download Report" button that generates a shareable PDF.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT CTA
+       ============================================================ -->
+  <section class="contact-cta" id="contact" aria-labelledby="contact-heading">
+    <div class="container contact-cta__inner glass">
+      <h2 id="contact-heading" class="section-title">Let's build smarter hiring with AI</h2>
+      <p class="section-sub">Questions, feedback, or collaboration ideas — reach out any time.</p>
+      <div class="contact-cta__actions">
+        <a href="https://github.com/sayan1929U" target="_blank" rel="noopener" class="btn btn--primary btn--lg">
+          <i class="fa-brands fa-github" aria-hidden="true"></i>
+          <span>GitHub</span>
+        </a>
+        <a href="https://www.linkedin.com/in/sayandey1111/" target="_blank" rel="noopener" class="btn btn--ghost btn--lg">
+          <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+          <span>LinkedIn</span>
+        </a>
+        <a href="mailto:sayandeyx6@gmail.com" class="btn btn--ghost btn--lg">
+          <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+          <span>Email</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a href="#home" class="brand">
+        <span class="brand__mark" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
+        <span class="brand__name">AI Resume Screening System</span>
+      </a>
+      <p class="footer__tagline">Built by <strong>Sayan Dey</strong></p>
+    </div>
+
+    <div class="footer__links">
+      <a href="https://github.com/sayan1929U" target="_blank" rel="noopener"><i class="fa-brands fa-github" aria-hidden="true"></i> github.com/sayan1929U</a>
+      <a href="https://www.linkedin.com/in/sayandey1111/" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin" aria-hidden="true"></i> linkedin.com/in/sayandey1111</a>
+      <a href="mailto:sayandeyx6@gmail.com"><i class="fa-solid fa-envelope" aria-hidden="true"></i> sayandeyx6@gmail.com</a>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>&copy; 2026 Sayan Dey</p>
+    <p>Built using FastAPI &bull; Machine Learning &bull; Docker &bull; NLP</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="/static/js/script.js"></script>
+</body>
+</html>
