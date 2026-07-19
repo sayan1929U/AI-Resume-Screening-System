@@ -11,6 +11,29 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+
+        env:
+          POSTGRES_USER: ats_user
+          POSTGRES_PASSWORD: ats_password
+          POSTGRES_DB: ats_db
+
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd="pg_isready -U ats_user -d ats_db"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DATABASE_URL: postgresql+asyncpg://ats_user:ats_password@localhost:5432/ats_db
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -28,22 +51,18 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Debug Repository
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432 -U ats_user -d ats_db; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          echo "PostgreSQL is ready."
+
+      - name: Debug Environment
         run: |
           echo "========== CURRENT DIRECTORY =========="
           pwd
-
-          echo ""
-          echo "========== ROOT FILES =========="
-          ls -la
-
-          echo ""
-          echo "========== APP DIRECTORY =========="
-          ls -la app || true
-
-          echo ""
-          echo "========== TESTS DIRECTORY =========="
-          ls -la tests || true
 
           echo ""
           echo "========== PYTHON VERSION =========="
@@ -53,9 +72,22 @@ jobs:
           echo "========== PYTHON PATH =========="
           python -c "import sys; print('\n'.join(sys.path))"
 
+          echo ""
+          echo "========== DATABASE URL =========="
+          echo "$DATABASE_URL"
+
+          echo ""
+          echo "========== ROOT FILES =========="
+          ls -la
+
+          echo ""
+          echo "========== APP DIRECTORY =========="
+          ls -la app
+
+          echo ""
+          echo "========== TESTS DIRECTORY =========="
+          ls -la tests
+
       - name: Run Tests
-        env:
-          PYTHONPATH: ${{ github.workspace }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           python -m pytest -v
