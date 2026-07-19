@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - master
-
   pull_request:
 
 jobs:
@@ -13,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -21,11 +20,41 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install Dependencies
+      - name: Upgrade pip
         run: |
           python -m pip install --upgrade pip
+
+      - name: Install Dependencies
+        run: |
           pip install -r requirements.txt
 
-      - name: Run Tests
+      - name: Debug Repository
         run: |
-          pytest
+          echo "========== CURRENT DIRECTORY =========="
+          pwd
+
+          echo ""
+          echo "========== ROOT FILES =========="
+          ls -la
+
+          echo ""
+          echo "========== APP DIRECTORY =========="
+          ls -la app || true
+
+          echo ""
+          echo "========== TESTS DIRECTORY =========="
+          ls -la tests || true
+
+          echo ""
+          echo "========== PYTHON VERSION =========="
+          python --version
+
+          echo ""
+          echo "========== PYTHON PATH =========="
+          python -c "import sys; print('\n'.join(sys.path))"
+
+      - name: Run Tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -m pytest -v
