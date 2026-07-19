@@ -40,12 +40,7 @@ import platform
 
 @app.get("/health", tags=["health"])
 async def health_check():
-    return {
-        "status": "healthy",
-        "application": "AI Resume Screener",
-        "version": "1.0.0",
-        "python_version": platform.python_version()
-    }
+    return {"status": "ok"}
 
 app.include_router(upload_router, prefix="/api")
 app.include_router(recruiter_router, prefix="/api")
