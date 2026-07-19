@@ -56,5 +56,6 @@ jobs:
       - name: Run Tests
         env:
           PYTHONPATH: ${{ github.workspace }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           python -m pytest -v
